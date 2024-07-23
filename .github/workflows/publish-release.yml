@@ -29,7 +29,7 @@ on:
 jobs:
   get-release-tag:
     name: Get release tag
-    runs-on: ubuntu-latest
+    runs-on: gha-runner-scale-set
     outputs:
       tag: ${{ steps.get-release-tag.outputs.tag }}
     steps:
@@ -51,7 +51,7 @@ jobs:
     needs: get-release-tag
     permissions:
       contents: write
-    runs-on: ubuntu-latest
+    runs-on: gha-runner-scale-set
     steps:
       - uses: actions/checkout@v4
         with:
@@ -79,7 +79,7 @@ jobs:
 
   npm-publish-dry-run:
     name: Publish to NPM (dry run)
-    runs-on: ubuntu-latest
+    runs-on: gha-runner-scale-set
     needs: publish-release
     steps:
       - uses: actions/checkout@v4
@@ -104,7 +104,7 @@ jobs:
   npm-publish:
     name: Publish to NPM
     environment: npm-publish
-    runs-on: ubuntu-latest
+    runs-on: gha-runner-scale-set
     needs:
       - npm-publish-dry-run
       - get-release-tag
@@ -128,7 +128,7 @@ jobs:
 
   is-environment-release:
     name: Determine whether this release updates the iframe execution environment
-    runs-on: ubuntu-latest
+    runs-on: gha-runner-scale-set
     needs: publish-release
     outputs:
       IS_ENVIRONMENT_RELEASE: ${{ steps.is-environment-release.outputs.IS_ENVIRONMENT_RELEASE }}
@@ -147,7 +147,7 @@ jobs:
 
   configure-environment-publish:
     name: Configure iframe execution environment release
-    runs-on: ubuntu-latest
+    runs-on: gha-runner-scale-set
     needs: is-environment-release
     if: needs.is-environment-release.outputs.IS_ENVIRONMENT_RELEASE == 'true'
     outputs:
@@ -212,7 +212,7 @@ jobs:
 
   is-test-snaps-release:
     name: Determine whether this release updates test snaps
-    runs-on: ubuntu-latest
+    runs-on: gha-runner-scale-set
     needs: publish-release
     outputs:
       IS_TEST_SNAPS_RELEASE: ${{ steps.set-output.outputs.IS_TEST_SNAPS_RELEASE }}
@@ -263,7 +263,7 @@ jobs:
 
   is-simulator-release:
     name: Determine whether this release updates the simulator
-    runs-on: ubuntu-latest
+    runs-on: gha-runner-scale-set
     needs: publish-release
     outputs:
       IS_SIMULATOR_RELEASE: ${{ steps.set-output.outputs.IS_SIMULATOR_RELEASE }}

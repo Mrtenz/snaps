@@ -9,7 +9,7 @@ on:
 jobs:
   prepare:
     name: Prepare
-    runs-on: ubuntu-latest
+    runs-on: gha-runner-scale-set
     outputs:
       test-workspace-package-names: ${{ steps.workspace-package-names.outputs.test-workspace-package-names }}
       e2e-workspace-package-names: ${{ steps.workspace-package-names.outputs.e2e-workspace-package-names }}
@@ -48,7 +48,7 @@ jobs:
 
   build:
     name: Build
-    runs-on: ubuntu-latest
+    runs-on: gha-runner-scale-set
     needs: prepare
     steps:
       - uses: actions/checkout@v4
@@ -78,7 +78,7 @@ jobs:
 
   build-simulator:
     name: Build "@metamask/snaps-simulator"
-    runs-on: ubuntu-latest
+    runs-on: gha-runner-scale-set
     needs: prepare
     steps:
       - uses: actions/checkout@v4
@@ -124,7 +124,7 @@ jobs:
 
   build-test-snaps:
     name: Build "@metamask/test-snaps"
-    runs-on: ubuntu-latest
+    runs-on: gha-runner-scale-set
     needs: prepare
     steps:
       - uses: actions/checkout@v4
@@ -146,7 +146,7 @@ jobs:
 
   policy:
     name: Generate LavaMoat policy
-    runs-on: ubuntu-latest
+    runs-on: gha-runner-scale-set
     needs: prepare
     steps:
       - uses: actions/checkout@v4
@@ -168,7 +168,7 @@ jobs:
 
   lint:
     name: Lint
-    runs-on: ubuntu-latest
+    runs-on: gha-runner-scale-set
     needs: prepare
     strategy:
       fail-fast: false
@@ -193,7 +193,7 @@ jobs:
 
   test:
     name: Test
-    runs-on: ubuntu-latest
+    runs-on: gha-runner-scale-set
     needs: prepare
     strategy:
       fail-fast: false
@@ -247,7 +247,7 @@ jobs:
 
   upload-coverage:
     name: Upload coverage to Codecov
-    runs-on: ubuntu-latest
+    runs-on: gha-runner-scale-set
     needs: test
     steps:
       - uses: actions/checkout@v4
@@ -264,7 +264,7 @@ jobs:
 
   test-e2e:
     name: E2E Test
-    runs-on: ubuntu-latest
+    runs-on: gha-runner-scale-set
     needs:
       - prepare
       - build

@@ -9,7 +9,7 @@ jobs:
   is-fork-pull-request:
     name: Determine whether this issue comment was on a pull request from a fork
     if: ${{ github.event.issue.pull_request && startsWith(github.event.comment.body, '@metamaskbot update-pr') }}
-    runs-on: ubuntu-latest
+    runs-on: gha-runner-scale-set
     outputs:
       IS_FORK: ${{ steps.is-fork.outputs.IS_FORK }}
     steps:
@@ -23,7 +23,7 @@ jobs:
 
   react-to-comment:
     name: React to the comment
-    runs-on: ubuntu-latest
+    runs-on: gha-runner-scale-set
     needs: is-fork-pull-request
     # Early exit if this is a fork, since later steps are skipped for forks.
     if: ${{ needs.is-fork-pull-request.outputs.IS_FORK == 'false' }}
@@ -45,7 +45,7 @@ jobs:
 
   prepare:
     name: Prepare dependencies
-    runs-on: ubuntu-latest
+    runs-on: gha-runner-scale-set
     needs: is-fork-pull-request
     # Early exit if this is a fork, since later steps are skipped for forks.
     if: ${{ needs.is-fork-pull-request.outputs.IS_FORK == 'false' }}
@@ -72,7 +72,7 @@ jobs:
 
   dedupe-yarn-lock:
     name: Deduplicate yarn.lock
-    runs-on: ubuntu-latest
+    runs-on: gha-runner-scale-set
     needs: prepare
     steps:
       - name: Checkout repository
@@ -99,7 +99,7 @@ jobs:
 
   regenerate-lavamoat-policies:
     name: Regenerate LavaMoat policies
-    runs-on: ubuntu-latest
+    runs-on: gha-runner-scale-set
     needs:
       - prepare
       - dedupe-yarn-lock
@@ -134,7 +134,7 @@ jobs:
 
   update-examples:
     name: Update examples
-    runs-on: ubuntu-latest
+    runs-on: gha-runner-scale-set
     needs:
       - prepare
       - dedupe-yarn-lock
@@ -172,7 +172,7 @@ jobs:
 
   commit-result:
     name: Commit result
-    runs-on: ubuntu-latest
+    runs-on: gha-runner-scale-set
     needs:
       - prepare
       - dedupe-yarn-lock

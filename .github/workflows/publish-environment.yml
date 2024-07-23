@@ -10,7 +10,7 @@ on:
 jobs:
   publish-environment:
     name: Publish execution environment
-    runs-on: ubuntu-latest
+    runs-on: gha-runner-scale-set
     environment: deploy-prod
     permissions:
       id-token: write

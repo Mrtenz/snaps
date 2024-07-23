@@ -19,7 +19,7 @@ on:
 jobs:
   publish-environment:
     name: Publish to GitHub Pages
-    runs-on: ubuntu-latest
+    runs-on: gha-runner-scale-set
     environment: github-pages
     permissions:
       contents: write
