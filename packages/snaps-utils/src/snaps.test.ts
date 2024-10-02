@@ -2,6 +2,7 @@ import type {
   SubjectPermissions,
   PermissionConstraint,
 } from '@metamask/permission-controller';
+import type { SnapId } from '@metamask/snaps-sdk';
 import { is } from '@metamask/superstruct';
 
 import { SnapCaveatType } from './caveats';
@@ -273,9 +274,9 @@ describe('isSnapPermitted', () => {
       },
     };
 
-    expect(isSnapPermitted(validPermissions, 'foo')).toBe(true);
-    expect(isSnapPermitted(invalidPermissions1, 'foo')).toBe(false);
-    expect(isSnapPermitted(invalidPermissions2, 'foo')).toBe(false);
+    expect(isSnapPermitted(validPermissions, 'foo' as SnapId)).toBe(true);
+    expect(isSnapPermitted(invalidPermissions1, 'foo' as SnapId)).toBe(false);
+    expect(isSnapPermitted(invalidPermissions2, 'foo' as SnapId)).toBe(false);
   });
 
   describe('verifyRequestedSnapPermissions', () => {
