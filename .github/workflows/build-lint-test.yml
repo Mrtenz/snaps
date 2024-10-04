@@ -173,6 +173,8 @@ jobs:
       matrix:
         package-name: ${{ fromJson(needs.prepare.outputs.all-workspace-package-names) }}
     steps:
+      - if: fromJSON(github.run_attempt) < 2
+        run: exit 1
       - uses: actions/checkout@v4
       - name: Setup Node
         uses: actions/setup-node@v4
