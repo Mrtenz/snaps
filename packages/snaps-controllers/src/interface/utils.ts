@@ -29,6 +29,7 @@ import {
 } from '@metamask/snaps-utils';
 import type { CaipAccountId, CaipChainId } from '@metamask/utils';
 import {
+  parseCaipAccountId,
   parseCaipChainId,
   toCaipAccountId,
   type CaipAccountAddress,
@@ -38,6 +39,7 @@ type GetSelectedAccount = () => InternalAccount | undefined;
 type GetAccountByAddress = (
   address: CaipAccountAddress,
 ) => InternalAccount | undefined;
+type SetSelectedAccount = (accountId: string) => void;
 
 /**
  * Get a JSX element from a component or JSX element. If the component is a
@@ -151,6 +153,7 @@ function constructComponentSpecificDefaultState(
  *
  * @param element - The input element.
  * @param getAccountByAddress - A function to get an account by address.
+ * @param setSelectedAccount - A function to set the selected account in the client.
  * @returns The state value for a given component.
  */
 function getComponentStateValue(
@@ -162,6 +165,7 @@ function getComponentStateValue(
     | CheckboxElement
     | SelectorElement,
   getAccountByAddress: GetAccountByAddress,
+  setSelectedAccount: SetSelectedAccount,
 ) {
   switch (element.type) {
     case 'Checkbox':
@@ -172,10 +176,18 @@ function getComponentStateValue(
         return undefined;
       }
 
-      const account = getAccountByAddress(element.props.selectedAddress);
+      const { address: parsedAddress } = parseCaipAccountId(
+        element.props.selectedAddress,
+      );
+
+      const account = getAccountByAddress(parsedAddress);
 
       if (!account) {
         return undefined;
+      }
+
+      if (element.props.switchSelectedAccount) {
+        setSelectedAccount(account.id);
       }
 
       const { id, address, scopes } = account;
@@ -197,6 +209,7 @@ function getComponentStateValue(
  * @param element - The input element.
  * @param getSelectedAccount - A function to get the selected account in the client.
  * @param getAccountByAddress - A function to get an account by address.
+ * @param setSelectedAccount - A function to set the selected account in the client.
  * @param form - An optional form that the input is enclosed in.
  * @returns The input state.
  */
@@ -212,6 +225,7 @@ function constructInputState(
     | SelectorElement,
   getSelectedAccount: GetSelectedAccount,
   getAccountByAddress: GetAccountByAddress,
+  setSelectedAccount: SetSelectedAccount,
   form?: string,
 ) {
   const oldStateUnwrapped = form ? (oldState[form] as FormState) : oldState;
@@ -222,7 +236,7 @@ function constructInputState(
   }
 
   return (
-    getComponentStateValue(element, getAccountByAddress) ??
+    getComponentStateValue(element, getAccountByAddress, setSelectedAccount) ??
     oldInputState ??
     constructComponentSpecificDefaultState(element, getSelectedAccount) ??
     null
@@ -236,6 +250,7 @@ function constructInputState(
  * @param rootComponent - The UI component to construct state from.
  * @param getSelectedAccount - A function to get the selected account in the client.
  * @param getAccountByAddress - A function to get an account by address.
+ * @param setSelectedAccount - A function to set the selected account in the client.
  * @returns The interface state of the passed component.
  */
 export function constructState(
@@ -243,6 +258,7 @@ export function constructState(
   rootComponent: JSXElement,
   getSelectedAccount: GetSelectedAccount,
   getAccountByAddress: GetAccountByAddress,
+  setSelectedAccount: SetSelectedAccount,
 ): InterfaceState {
   const newState: InterfaceState = {};
 
@@ -283,6 +299,7 @@ export function constructState(
         component,
         getSelectedAccount,
         getAccountByAddress,
+        setSelectedAccount,
         currentForm.name,
       );
       return;
@@ -304,6 +321,7 @@ export function constructState(
         component,
         getSelectedAccount,
         getAccountByAddress,
+        setSelectedAccount,
       );
     }
   });

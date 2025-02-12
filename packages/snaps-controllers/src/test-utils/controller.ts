@@ -9,6 +9,7 @@ import {
   generateSalt,
   isVaultUpdated,
 } from '@metamask/browser-passworder';
+import type { InternalAccount } from '@metamask/keyring-internal-api';
 import type {
   PermissionConstraint,
   SubjectPermissions,
@@ -779,6 +780,9 @@ export const getRestrictedSnapInterfaceControllerMessenger = (
       'PhishingController:maybeUpdateState',
       'ApprovalController:hasRequest',
       'ApprovalController:acceptRequest',
+      'AccountsController:getAccountByAddress',
+      'AccountsController:getSelectedMultichainAccount',
+      'AccountsController:setSelectedAccount',
     ],
     allowedEvents: [
       'NotificationServicesController:notificationsListUpdated',
@@ -796,6 +800,33 @@ export const getRestrictedSnapInterfaceControllerMessenger = (
       result: false,
       type: 'all',
     }));
+
+    messenger.registerActionHandler(
+      'AccountsController:getAccountByAddress',
+      (address: string) =>
+        ({
+          address,
+          id: 'foo',
+          scopes: ['eip155:0'],
+        } as unknown as InternalAccount),
+    );
+
+    messenger.registerActionHandler(
+      'AccountsController:getSelectedMultichainAccount',
+      () =>
+        ({
+          address: '0x1234567890123456789012345678901234567890',
+          id: 'foo',
+          scopes: ['eip155:0'],
+        } as unknown as InternalAccount),
+    );
+
+    messenger.registerActionHandler(
+      'AccountsController:setSelectedAccount',
+      (_id: string) => {
+        // no-op
+      },
+    );
   }
 
   return snapInterfaceControllerMessenger;

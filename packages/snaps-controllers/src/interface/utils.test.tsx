@@ -15,9 +15,15 @@ import {
   Selector,
   Card,
   SelectorOption,
+  AccountSelector,
 } from '@metamask/snaps-sdk/jsx';
 
-import { assertNameIsUnique, constructState, getJsxInterface } from './utils';
+import {
+  assertNameIsUnique,
+  constructState,
+  createAddressList,
+  getJsxInterface,
+} from './utils';
 
 describe('getJsxInterface', () => {
   it('returns the JSX interface for a JSX element', () => {
@@ -63,7 +69,27 @@ describe('assertNameIsUnique', () => {
   });
 });
 
+describe('createAddressList', () => {
+  it('creates an address list from an account', () => {
+    const result = createAddressList(
+      '0x1234567890123456789012345678901234567890',
+      ['eip155:1', 'eip155:2'],
+    );
+
+    expect(result).toStrictEqual([
+      'eip155:1:0x1234567890123456789012345678901234567890',
+      'eip155:2:0x1234567890123456789012345678901234567890',
+    ]);
+  });
+});
+
 describe('constructState', () => {
+  const getSelectedAccount = jest.fn();
+
+  const getAccountByAddress = jest.fn();
+
+  const setSelectedAccount = jest.fn();
+
   it('can construct a new component state', () => {
     const element = (
       <Box>
@@ -76,7 +102,13 @@ describe('constructState', () => {
       </Box>
     );
 
-    const result = constructState({}, element);
+    const result = constructState(
+      {},
+      element,
+      getSelectedAccount,
+      getAccountByAddress,
+      setSelectedAccount,
+    );
 
     expect(result).toStrictEqual({ foo: { bar: null } });
   });
@@ -94,7 +126,13 @@ describe('constructState', () => {
       </Box>
     );
 
-    const result = constructState({}, element);
+    const result = constructState(
+      {},
+      element,
+      getSelectedAccount,
+      getAccountByAddress,
+      setSelectedAccount,
+    );
 
     expect(result).toStrictEqual({ foo: { bar: null } });
   });
@@ -116,7 +154,13 @@ describe('constructState', () => {
       </Box>
     );
 
-    const result = constructState(state, element);
+    const result = constructState(
+      state,
+      element,
+      getSelectedAccount,
+      getAccountByAddress,
+      setSelectedAccount,
+    );
     expect(result).toStrictEqual({ foo: { bar: 'test', baz: null } });
   });
 
@@ -137,7 +181,13 @@ describe('constructState', () => {
       </Box>
     );
 
-    const result = constructState(state, element);
+    const result = constructState(
+      state,
+      element,
+      getSelectedAccount,
+      getAccountByAddress,
+      setSelectedAccount,
+    );
     expect(result).toStrictEqual({ form: { bar: 'test', baz: null } });
   });
 
@@ -169,7 +219,13 @@ describe('constructState', () => {
       </Box>
     );
 
-    const result = constructState(state, element);
+    const result = constructState(
+      state,
+      element,
+      getSelectedAccount,
+      getAccountByAddress,
+      setSelectedAccount,
+    );
 
     expect(result).toStrictEqual({
       form1: { bar: 'test', baz: null },
@@ -197,7 +253,13 @@ describe('constructState', () => {
       </Box>
     );
 
-    const result = constructState(state, element);
+    const result = constructState(
+      state,
+      element,
+      getSelectedAccount,
+      getAccountByAddress,
+      setSelectedAccount,
+    );
     expect(result).toStrictEqual({
       form1: { bar: 'test', baz: null },
     });
@@ -235,7 +297,13 @@ describe('constructState', () => {
       </Box>
     );
 
-    const result = constructState(state, element);
+    const result = constructState(
+      state,
+      element,
+      getSelectedAccount,
+      getAccountByAddress,
+      setSelectedAccount,
+    );
     expect(result).toStrictEqual({
       form1: { bar: 'test', baz: null },
       form2: { bar: 'def', baz: null },
@@ -251,7 +319,13 @@ describe('constructState', () => {
       </Box>
     );
 
-    const result = constructState({}, element);
+    const result = constructState(
+      {},
+      element,
+      getSelectedAccount,
+      getAccountByAddress,
+      setSelectedAccount,
+    );
     expect(result).toStrictEqual({
       foo: 'bar',
     });
@@ -264,7 +338,13 @@ describe('constructState', () => {
       </Box>
     );
 
-    const result = constructState({}, element);
+    const result = constructState(
+      {},
+      element,
+      getSelectedAccount,
+      getAccountByAddress,
+      setSelectedAccount,
+    );
     expect(result).toStrictEqual({
       foo: 'bar',
     });
@@ -277,7 +357,13 @@ describe('constructState', () => {
       </Box>
     );
 
-    const result = constructState({}, element);
+    const result = constructState(
+      {},
+      element,
+      getSelectedAccount,
+      getAccountByAddress,
+      setSelectedAccount,
+    );
     expect(result).toStrictEqual({
       foo: null,
     });
@@ -293,7 +379,13 @@ describe('constructState', () => {
       </Box>
     );
 
-    const result = constructState({}, element);
+    const result = constructState(
+      {},
+      element,
+      getSelectedAccount,
+      getAccountByAddress,
+      setSelectedAccount,
+    );
     expect(result).toStrictEqual({
       foo: 'option1',
     });
@@ -309,7 +401,13 @@ describe('constructState', () => {
       </Box>
     );
 
-    const result = constructState({}, element);
+    const result = constructState(
+      {},
+      element,
+      getSelectedAccount,
+      getAccountByAddress,
+      setSelectedAccount,
+    );
     expect(result).toStrictEqual({
       foo: 'option2',
     });
@@ -329,7 +427,13 @@ describe('constructState', () => {
       </Box>
     );
 
-    const result = constructState({}, element);
+    const result = constructState(
+      {},
+      element,
+      getSelectedAccount,
+      getAccountByAddress,
+      setSelectedAccount,
+    );
     expect(result).toStrictEqual({
       form: { foo: 'option1' },
     });
@@ -349,7 +453,13 @@ describe('constructState', () => {
       </Box>
     );
 
-    const result = constructState({}, element);
+    const result = constructState(
+      {},
+      element,
+      getSelectedAccount,
+      getAccountByAddress,
+      setSelectedAccount,
+    );
     expect(result).toStrictEqual({
       form: { foo: 'option2' },
     });
@@ -365,7 +475,13 @@ describe('constructState', () => {
       </Box>
     );
 
-    const result = constructState({}, element);
+    const result = constructState(
+      {},
+      element,
+      getSelectedAccount,
+      getAccountByAddress,
+      setSelectedAccount,
+    );
     expect(result).toStrictEqual({
       foo: 'option1',
     });
@@ -381,7 +497,13 @@ describe('constructState', () => {
       </Box>
     );
 
-    const result = constructState({}, element);
+    const result = constructState(
+      {},
+      element,
+      getSelectedAccount,
+      getAccountByAddress,
+      setSelectedAccount,
+    );
     expect(result).toStrictEqual({
       foo: 'option2',
     });
@@ -401,7 +523,13 @@ describe('constructState', () => {
       </Box>
     );
 
-    const result = constructState({}, element);
+    const result = constructState(
+      {},
+      element,
+      getSelectedAccount,
+      getAccountByAddress,
+      setSelectedAccount,
+    );
     expect(result).toStrictEqual({
       form: { foo: 'option1' },
     });
@@ -421,7 +549,13 @@ describe('constructState', () => {
       </Box>
     );
 
-    const result = constructState({}, element);
+    const result = constructState(
+      {},
+      element,
+      getSelectedAccount,
+      getAccountByAddress,
+      setSelectedAccount,
+    );
     expect(result).toStrictEqual({
       form: { foo: 'option2' },
     });
@@ -434,7 +568,13 @@ describe('constructState', () => {
       </Box>
     );
 
-    const result = constructState({}, element);
+    const result = constructState(
+      {},
+      element,
+      getSelectedAccount,
+      getAccountByAddress,
+      setSelectedAccount,
+    );
     expect(result).toStrictEqual({
       foo: true,
     });
@@ -451,7 +591,13 @@ describe('constructState', () => {
       </Box>
     );
 
-    const result = constructState({}, element);
+    const result = constructState(
+      {},
+      element,
+      getSelectedAccount,
+      getAccountByAddress,
+      setSelectedAccount,
+    );
     expect(result).toStrictEqual({
       form: { foo: false },
     });
@@ -468,7 +614,13 @@ describe('constructState', () => {
       </Box>
     );
 
-    const result = constructState({}, element);
+    const result = constructState(
+      {},
+      element,
+      getSelectedAccount,
+      getAccountByAddress,
+      setSelectedAccount,
+    );
     expect(result).toStrictEqual({
       form: { foo: true },
     });
@@ -488,7 +640,13 @@ describe('constructState', () => {
       </Box>
     );
 
-    const result = constructState({}, element);
+    const result = constructState(
+      {},
+      element,
+      getSelectedAccount,
+      getAccountByAddress,
+      setSelectedAccount,
+    );
     expect(result).toStrictEqual({
       foo: 'option1',
     });
@@ -508,7 +666,13 @@ describe('constructState', () => {
       </Box>
     );
 
-    const result = constructState({}, element);
+    const result = constructState(
+      {},
+      element,
+      getSelectedAccount,
+      getAccountByAddress,
+      setSelectedAccount,
+    );
     expect(result).toStrictEqual({
       foo: 'option2',
     });
@@ -532,7 +696,13 @@ describe('constructState', () => {
       </Box>
     );
 
-    const result = constructState({}, element);
+    const result = constructState(
+      {},
+      element,
+      getSelectedAccount,
+      getAccountByAddress,
+      setSelectedAccount,
+    );
     expect(result).toStrictEqual({
       form: { foo: 'option1' },
     });
@@ -556,10 +726,254 @@ describe('constructState', () => {
       </Box>
     );
 
-    const result = constructState({}, element);
+    const result = constructState(
+      {},
+      element,
+      getSelectedAccount,
+      getAccountByAddress,
+      setSelectedAccount,
+    );
     expect(result).toStrictEqual({
       form: { foo: 'option2' },
     });
+  });
+
+  it('sets default value for root level AccountSelector', () => {
+    getSelectedAccount.mockReturnValue({
+      id: 'foo',
+      address: '0x1234567890123456789012345678901234567890',
+      scopes: ['eip155:0'],
+    });
+
+    getAccountByAddress.mockImplementation((address: string) => ({
+      id: 'foo',
+      address,
+      scopes: ['eip155:0'],
+    }));
+
+    const element = (
+      <Box>
+        <AccountSelector name="foo" />
+      </Box>
+    );
+
+    const result = constructState(
+      {},
+      element,
+      getSelectedAccount,
+      getAccountByAddress,
+      setSelectedAccount,
+    );
+    expect(result).toStrictEqual({
+      foo: {
+        accountId: 'foo',
+        addresses: ['eip155:0:0x1234567890123456789012345678901234567890'],
+      },
+    });
+  });
+
+  it('supports root level AccountSelector', () => {
+    getSelectedAccount.mockReturnValue({
+      id: 'foo',
+      address: '0x1234567890123456789012345678901234567890',
+      scopes: ['eip155:0'],
+    });
+
+    getAccountByAddress.mockImplementation((address: string) => ({
+      id: 'foo',
+      address,
+      scopes: ['eip155:0'],
+    }));
+
+    const element = (
+      <Box>
+        <AccountSelector
+          name="foo"
+          selectedAddress="eip155:0:0x1234567890123456789012345678901234567890"
+        />
+      </Box>
+    );
+
+    const result = constructState(
+      {},
+      element,
+      getSelectedAccount,
+      getAccountByAddress,
+      setSelectedAccount,
+    );
+    expect(result).toStrictEqual({
+      foo: {
+        accountId: 'foo',
+        addresses: ['eip155:0:0x1234567890123456789012345678901234567890'],
+      },
+    });
+  });
+
+  it('sets default value for AccountSelector in form', () => {
+    getSelectedAccount.mockReturnValue({
+      id: 'foo',
+      address: '0x1234567890123456789012345678901234567890',
+      scopes: ['eip155:0'],
+    });
+
+    getAccountByAddress.mockImplementation((address: string) => ({
+      id: 'foo',
+      address,
+      scopes: ['eip155:0'],
+    }));
+
+    const element = (
+      <Box>
+        <Form name="form">
+          <Field label="foo">
+            <AccountSelector name="foo" />
+          </Field>
+        </Form>
+      </Box>
+    );
+
+    const result = constructState(
+      {},
+      element,
+      getSelectedAccount,
+      getAccountByAddress,
+      setSelectedAccount,
+    );
+    expect(result).toStrictEqual({
+      form: {
+        foo: {
+          accountId: 'foo',
+          addresses: ['eip155:0:0x1234567890123456789012345678901234567890'],
+        },
+      },
+    });
+  });
+
+  it('supports AccountSelector in form', () => {
+    getSelectedAccount.mockReturnValue({
+      id: 'foo',
+      address: '0x1234567890123456789012345678901234567890',
+      scopes: ['eip155:0'],
+    });
+
+    getAccountByAddress.mockImplementation((address: string) => ({
+      id: 'foo',
+      address,
+      scopes: ['eip155:0'],
+    }));
+
+    const element = (
+      <Box>
+        <Form name="form">
+          <Field label="foo">
+            <AccountSelector
+              name="foo"
+              selectedAddress="eip155:0:0x1234567890123456789012345678901234567890"
+            />
+          </Field>
+        </Form>
+      </Box>
+    );
+
+    const result = constructState(
+      {},
+      element,
+      getSelectedAccount,
+      getAccountByAddress,
+      setSelectedAccount,
+    );
+    expect(result).toStrictEqual({
+      form: {
+        foo: {
+          accountId: 'foo',
+          addresses: ['eip155:0:0x1234567890123456789012345678901234567890'],
+        },
+      },
+    });
+  });
+
+  it('sets the selected account to the currently selected account if the account does not exist for AccountSelector', () => {
+    getSelectedAccount.mockReturnValue({
+      id: 'foo',
+      address: '0x1234567890123456789012345678901234567890',
+      scopes: ['eip155:0'],
+    });
+
+    getAccountByAddress.mockReturnValue(undefined);
+
+    const element = (
+      <Box>
+        <AccountSelector
+          name="foo"
+          selectedAddress="bip122:000000000019d6689c085ae165831e93:128Lkh3S7CkDTBZ8W7BbpsN3YYizJMp8p6"
+        />
+      </Box>
+    );
+
+    const result = constructState(
+      {},
+      element,
+      getSelectedAccount,
+      getAccountByAddress,
+      setSelectedAccount,
+    );
+
+    expect(result).toStrictEqual({
+      foo: {
+        accountId: 'foo',
+        addresses: ['eip155:0:0x1234567890123456789012345678901234567890'],
+      },
+    });
+  });
+
+  it('sets the selected account to null if there is no selected account', () => {
+    getSelectedAccount.mockReturnValue(undefined);
+
+    const element = (
+      <Box>
+        <AccountSelector name="foo" />
+      </Box>
+    );
+
+    const result = constructState(
+      {},
+      element,
+      getSelectedAccount,
+      getAccountByAddress,
+      setSelectedAccount,
+    );
+
+    expect(result).toStrictEqual({
+      foo: null,
+    });
+  });
+
+  it('switches the selected account if `switchSelectedAccount` is set', () => {
+    getAccountByAddress.mockImplementation((address: string) => ({
+      id: 'foo',
+      address,
+      scopes: ['eip155:0'],
+    }));
+
+    const element = (
+      <Box>
+        <AccountSelector
+          name="foo"
+          selectedAddress="eip155:0:0x1234567890123456789012345678901234567890"
+          switchSelectedAccount
+        />
+      </Box>
+    );
+
+    constructState(
+      {},
+      element,
+      getSelectedAccount,
+      getAccountByAddress,
+      setSelectedAccount,
+    );
+
+    expect(setSelectedAccount).toHaveBeenCalledWith('foo');
   });
 
   it('supports nested fields', () => {
@@ -579,7 +993,13 @@ describe('constructState', () => {
       </Box>
     );
 
-    const result = constructState({}, element);
+    const result = constructState(
+      {},
+      element,
+      getSelectedAccount,
+      getAccountByAddress,
+      setSelectedAccount,
+    );
     expect(result).toStrictEqual({
       form: { bar: 'option2' },
     });
@@ -610,7 +1030,13 @@ describe('constructState', () => {
       </Box>
     );
 
-    const result = constructState({}, element);
+    const result = constructState(
+      {},
+      element,
+      getSelectedAccount,
+      getAccountByAddress,
+      setSelectedAccount,
+    );
     expect(result).toStrictEqual({
       form: { baz: 'option4' },
       form2: { bar: 'option2' },
@@ -624,7 +1050,13 @@ describe('constructState', () => {
       </Box>
     );
 
-    const result = constructState({ foo: null, bar: null }, element);
+    const result = constructState(
+      { foo: null, bar: null },
+      element,
+      getSelectedAccount,
+      getAccountByAddress,
+      setSelectedAccount,
+    );
     expect(result).toStrictEqual({
       foo: null,
     });
@@ -641,7 +1073,13 @@ describe('constructState', () => {
       </Box>
     );
 
-    const result = constructState(state, element);
+    const result = constructState(
+      state,
+      element,
+      getSelectedAccount,
+      getAccountByAddress,
+      setSelectedAccount,
+    );
     expect(result).toStrictEqual({
       foo: 'bar',
     });
@@ -654,7 +1092,13 @@ describe('constructState', () => {
       </Box>
     );
 
-    const result = constructState({}, element);
+    const result = constructState(
+      {},
+      element,
+      getSelectedAccount,
+      getAccountByAddress,
+      setSelectedAccount,
+    );
     expect(result).toStrictEqual({
       foo: null,
     });
@@ -672,7 +1116,15 @@ describe('constructState', () => {
       </Form>
     );
 
-    expect(() => constructState({}, element)).toThrow(
+    expect(() =>
+      constructState(
+        {},
+        element,
+        getSelectedAccount,
+        getAccountByAddress,
+        setSelectedAccount,
+      ),
+    ).toThrow(
       `Duplicate component names are not allowed, found multiple instances of: "foo".`,
     );
   });
@@ -685,7 +1137,15 @@ describe('constructState', () => {
       </Box>
     );
 
-    expect(() => constructState({}, element)).toThrow(
+    expect(() =>
+      constructState(
+        {},
+        element,
+        getSelectedAccount,
+        getAccountByAddress,
+        setSelectedAccount,
+      ),
+    ).toThrow(
       `Duplicate component names are not allowed, found multiple instances of: "test".`,
     );
   });
@@ -702,7 +1162,15 @@ describe('constructState', () => {
       </Box>
     );
 
-    expect(() => constructState({}, element)).toThrow(
+    expect(() =>
+      constructState(
+        {},
+        element,
+        getSelectedAccount,
+        getAccountByAddress,
+        setSelectedAccount,
+      ),
+    ).toThrow(
       `Duplicate component names are not allowed, found multiple instances of: "test".`,
     );
   });
