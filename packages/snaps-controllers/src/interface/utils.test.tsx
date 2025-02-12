@@ -18,12 +18,7 @@ import {
   AccountSelector,
 } from '@metamask/snaps-sdk/jsx';
 
-import {
-  assertNameIsUnique,
-  constructState,
-  createAddressList,
-  getJsxInterface,
-} from './utils';
+import { assertNameIsUnique, constructState, getJsxInterface } from './utils';
 
 describe('getJsxInterface', () => {
   it('returns the JSX interface for a JSX element', () => {
@@ -66,20 +61,6 @@ describe('assertNameIsUnique', () => {
     const state = { test: 'foo' };
 
     expect(() => assertNameIsUnique(state, 'bar')).not.toThrow();
-  });
-});
-
-describe('createAddressList', () => {
-  it('creates an address list from an account', () => {
-    const result = createAddressList(
-      '0x1234567890123456789012345678901234567890',
-      ['eip155:1', 'eip155:2'],
-    );
-
-    expect(result).toStrictEqual([
-      'eip155:1:0x1234567890123456789012345678901234567890',
-      'eip155:2:0x1234567890123456789012345678901234567890',
-    ]);
   });
 });
 

@@ -1,3 +1,4 @@
+export * from './address';
 export * from './array';
 export * from './auxiliary-files';
 export * from './base64';
