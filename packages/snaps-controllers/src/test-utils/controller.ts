@@ -9,7 +9,6 @@ import {
   generateSalt,
   isVaultUpdated,
 } from '@metamask/browser-passworder';
-import type { InternalAccount } from '@metamask/keyring-internal-api';
 import type {
   PermissionConstraint,
   SubjectPermissions,
@@ -803,22 +802,22 @@ export const getRestrictedSnapInterfaceControllerMessenger = (
 
     messenger.registerActionHandler(
       'AccountsController:getAccountByAddress',
-      (address: string) =>
-        ({
-          address,
-          id: 'foo',
-          scopes: ['eip155:0'],
-        } as unknown as InternalAccount),
+      // @ts-expect-error partial mock
+      (address: string) => ({
+        address,
+        id: 'foo',
+        scopes: ['eip155:0'],
+      }),
     );
 
     messenger.registerActionHandler(
       'AccountsController:getSelectedMultichainAccount',
-      () =>
-        ({
-          address: '0x1234567890123456789012345678901234567890',
-          id: 'foo',
-          scopes: ['eip155:0'],
-        } as unknown as InternalAccount),
+      // @ts-expect-error partial mock
+      () => ({
+        address: '0x1234567890123456789012345678901234567890',
+        id: 'foo',
+        scopes: ['eip155:0'],
+      }),
     );
 
     messenger.registerActionHandler(

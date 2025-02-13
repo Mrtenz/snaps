@@ -22,7 +22,7 @@ import type {
 } from '@metamask/snaps-sdk/jsx';
 import { isJSXElementUnsafe } from '@metamask/snaps-sdk/jsx';
 import {
-  createAddressList,
+  createAccountList,
   getJsonSizeUnsafe,
   getJsxChildren,
   getJsxElementFromComponent,
@@ -30,10 +30,28 @@ import {
 } from '@metamask/snaps-utils';
 import { parseCaipAccountId, type CaipAccountAddress } from '@metamask/utils';
 
+/**
+ * A function to get the selected account in the client.
+ *
+ * @returns The selected account.
+ */
 type GetSelectedAccount = () => InternalAccount | undefined;
+
+/**
+ * A function to get an account by address.
+ *
+ * @param address - The address of the account.
+ * @returns The account with the given address or undefined if none.
+ */
 type GetAccountByAddress = (
   address: CaipAccountAddress,
 ) => InternalAccount | undefined;
+
+/**
+ * A function to set the selected account in the client.
+ *
+ * @param accountId - The ID of the account to set as selected.
+ */
 type SetSelectedAccount = (accountId: string) => void;
 
 /**
@@ -110,7 +128,7 @@ function constructComponentSpecificDefaultState(
 
       const { id, address, scopes } = account;
 
-      const addresses = createAddressList(address, scopes);
+      const addresses = createAccountList(address, scopes);
 
       return { accountId: id, addresses };
     }
@@ -121,6 +139,42 @@ function constructComponentSpecificDefaultState(
     default:
       return null;
   }
+}
+
+/**
+ * Get the state value for an account selector.
+ *
+ * @param element - The account selector element.
+ * @param getAccountByAddress - A function to get an account by address.
+ * @param setSelectedAccount - A function to set the selected account in the client.
+ * @returns The state value for the account selector.
+ */
+function getAccountSelectorStateValue(
+  element: AccountSelectorElement,
+  getAccountByAddress: GetAccountByAddress,
+  setSelectedAccount: SetSelectedAccount,
+) {
+  if (!element.props.value) {
+    return undefined;
+  }
+
+  const { address: parsedAddress } = parseCaipAccountId(element.props.value);
+
+  const account = getAccountByAddress(parsedAddress);
+
+  if (!account) {
+    return undefined;
+  }
+
+  if (element.props.switchGlobalAccount) {
+    setSelectedAccount(account.id);
+  }
+
+  const { id, address, scopes } = account;
+
+  const addresses = createAccountList(address, scopes);
+
+  return { accountId: id, addresses };
 }
 
 /**
@@ -149,31 +203,12 @@ function getComponentStateValue(
     case 'Checkbox':
       return element.props.checked;
 
-    case 'AccountSelector': {
-      if (!element.props.selectedAddress) {
-        return undefined;
-      }
-
-      const { address: parsedAddress } = parseCaipAccountId(
-        element.props.selectedAddress,
+    case 'AccountSelector':
+      return getAccountSelectorStateValue(
+        element,
+        getAccountByAddress,
+        setSelectedAccount,
       );
-
-      const account = getAccountByAddress(parsedAddress);
-
-      if (!account) {
-        return undefined;
-      }
-
-      if (element.props.switchSelectedAccount) {
-        setSelectedAccount(account.id);
-      }
-
-      const { id, address, scopes } = account;
-
-      const addresses = createAddressList(address, scopes);
-
-      return { accountId: id, addresses };
-    }
 
     default:
       return element.props.value;

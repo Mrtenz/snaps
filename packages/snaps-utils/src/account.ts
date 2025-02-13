@@ -8,7 +8,7 @@ import { parseCaipChainId, toCaipAccountId } from '@metamask/utils';
  * @param scopes - The scopes to create the account IDs from.
  * @returns The list of CAIP account IDs.
  */
-export function createAddressList(
+export function createAccountList(
   address: string,
   scopes: CaipChainId[],
 ): CaipAccountId[] {

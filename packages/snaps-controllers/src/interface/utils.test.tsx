@@ -770,7 +770,7 @@ describe('constructState', () => {
       <Box>
         <AccountSelector
           name="foo"
-          selectedAddress="eip155:0:0x1234567890123456789012345678901234567890"
+          value="eip155:0:0x1234567890123456789012345678901234567890"
         />
       </Box>
     );
@@ -849,7 +849,7 @@ describe('constructState', () => {
           <Field label="foo">
             <AccountSelector
               name="foo"
-              selectedAddress="eip155:0:0x1234567890123456789012345678901234567890"
+              value="eip155:0:0x1234567890123456789012345678901234567890"
             />
           </Field>
         </Form>
@@ -886,7 +886,7 @@ describe('constructState', () => {
       <Box>
         <AccountSelector
           name="foo"
-          selectedAddress="bip122:000000000019d6689c085ae165831e93:128Lkh3S7CkDTBZ8W7BbpsN3YYizJMp8p6"
+          value="bip122:000000000019d6689c085ae165831e93:128Lkh3S7CkDTBZ8W7BbpsN3YYizJMp8p6"
         />
       </Box>
     );
@@ -929,7 +929,7 @@ describe('constructState', () => {
     });
   });
 
-  it('switches the selected account if `switchSelectedAccount` is set', () => {
+  it('switches the selected account if `switchGlobalAccount` is set', () => {
     getAccountByAddress.mockImplementation((address: string) => ({
       id: 'foo',
       address,
@@ -940,8 +940,8 @@ describe('constructState', () => {
       <Box>
         <AccountSelector
           name="foo"
-          selectedAddress="eip155:0:0x1234567890123456789012345678901234567890"
-          switchSelectedAccount
+          value="eip155:0:0x1234567890123456789012345678901234567890"
+          switchGlobalAccount
         />
       </Box>
     );
