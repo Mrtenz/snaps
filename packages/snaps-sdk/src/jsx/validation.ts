@@ -29,6 +29,7 @@ import {
   isPlainObject,
   JsonStruct,
 } from '@metamask/utils';
+import type { CaipChainId } from '@metamask/utils';
 
 import type {
   GenericSnapChildren,
@@ -88,7 +89,7 @@ import {
   svg,
   typedUnion,
 } from '../internals';
-import type { CaipChainId, EmptyObject } from '../types';
+import type { EmptyObject } from '../types';
 
 /**
  * A struct for the {@link Key} type.
