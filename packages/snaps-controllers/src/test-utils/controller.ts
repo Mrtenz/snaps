@@ -780,6 +780,7 @@ export const getRestrictedSnapInterfaceControllerMessenger = (
       'ApprovalController:hasRequest',
       'ApprovalController:acceptRequest',
       'MultichainAssetsController:getState',
+      'AccountsController:getAccountByAddress',
     ],
     allowedEvents: [
       'NotificationServicesController:notificationsListUpdated',
@@ -803,6 +804,16 @@ export const getRestrictedSnapInterfaceControllerMessenger = (
       () => ({
         assetsMetadata: {},
         accountsAssets: {},
+      }),
+    );
+
+    messenger.registerActionHandler(
+      'AccountsController:getAccountByAddress',
+      // @ts-expect-error partial mock
+      (address: string) => ({
+        address,
+        id: 'foo',
+        scopes: ['eip155:0'],
       }),
     );
   }
