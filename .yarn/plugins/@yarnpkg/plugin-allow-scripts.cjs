@@ -3,6 +3,11 @@
 module.exports = {
   name: "@yarnpkg/plugin-allow-scripts",
   factory: function (require) {
+    if (process.env.IS_DEPENDABOT) {
+      console.log("Skipping allow-scripts check because this is a Dependabot run.");
+      return {}
+    }
+
     var plugin = (() => {
       var a = Object.create, l = Object.defineProperty;
       var i = Object.getOwnPropertyDescriptor;
@@ -31,11 +36,6 @@ module.exports = {
       var n = x(f("@yarnpkg/shell")), y = {
         hooks: {
           afterAllInstalled: async () => {
-            if (process.env.IS_DEPENDABOT) {
-              console.log("Skipping allow-scripts check because this is a Dependabot run.");
-              return
-            }
-
             let e = await (0, n.execute)("yarn run allow-scripts");
             e !== 0 && process.exit(e)
           }
