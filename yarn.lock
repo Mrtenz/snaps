@@ -4838,15 +4838,15 @@ __metadata:
   linkType: soft
 
 "@metamask/key-tree@npm:^10.1.0":
-  version: 10.1.0
-  resolution: "@metamask/key-tree@npm:10.1.0"
+  version: 10.0.0
+  resolution: "@metamask/key-tree@npm:10.0.0"
   dependencies:
     "@metamask/scure-bip39": "npm:^2.1.1"
     "@metamask/utils": "npm:^11.0.1"
     "@noble/curves": "npm:^1.8.1"
     "@noble/hashes": "npm:^1.3.2"
     "@scure/base": "npm:^1.0.0"
-  checksum: 10/b1292de03257d52fe306a0a9131d17cad46bad1a1b36df15b09ca9fe0168fb1d2a0c4f33febe88cd03656ad585273ebfe54cd67ceeb12f5d69d85df6a2b57e99
+  checksum: 10/a9f1b3d28e41b84ab11a811abb3e0809b4919da642778136c3a9f67b035961920ee31546e7fcb452da2e0781c15fa2427da9de353e99bc83f56da10a2d35d0d3
   languageName: node
   linkType: hard
 
@@ -5999,8 +5999,8 @@ __metadata:
   linkType: soft
 
 "@metamask/utils@npm:^11.0.1, @metamask/utils@npm:^11.1.0, @metamask/utils@npm:^11.2.0":
-  version: 11.2.0
-  resolution: "@metamask/utils@npm:11.2.0"
+  version: 11.0.0
+  resolution: "@metamask/utils@npm:11.0.0"
   dependencies:
     "@ethereumjs/tx": "npm:^4.2.0"
     "@metamask/superstruct": "npm:^3.1.0"
@@ -6011,7 +6011,7 @@ __metadata:
     pony-cause: "npm:^2.1.10"
     semver: "npm:^7.5.4"
     uuid: "npm:^9.0.1"
-  checksum: 10/9cc2cb6af4627085e72a310ba9b8921c69757d94e2992d4664627e5a0d99b1f2f7f8069c6f22262515135e1172bd66b82d00512d90ea2ec6da4e768f3d7d4ae2
+  checksum: 10/a836fcbbc1e88af9c514f643bf5c6b85a9c9f433a6f43184e3c8e8d464390c6eafd788737904564c86b4ac81c4d3e0f070408ce6ae5b71f6abbd59a94f6137de
   languageName: node
   linkType: hard
 
