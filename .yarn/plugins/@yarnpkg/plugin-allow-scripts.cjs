@@ -1,13 +1,14 @@
 /* eslint-disable */
 //prettier-ignore
+
+if (process.env.IS_DEPENDABOT) {
+  console.log("Skipping allow-scripts check because this is a Dependabot run.");
+  return;
+}
+
 module.exports = {
   name: "@yarnpkg/plugin-allow-scripts",
   factory: function (require) {
-    if (process.env.IS_DEPENDABOT) {
-      console.log("Skipping allow-scripts check because this is a Dependabot run.");
-      return {}
-    }
-
     var plugin = (() => {
       var a = Object.create, l = Object.defineProperty;
       var i = Object.getOwnPropertyDescriptor;
